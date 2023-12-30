@@ -1,0 +1,97 @@
+import random
+
+
+class ComputerBrain:
+
+    def __init__(self, one, two, three, four, five, six, seven, eight, nine):
+        self.one = one
+        self.two = two
+        self.three = three
+        self.four = four
+        self.five = five
+        self.six = six
+        self.seven = seven
+        self.eight = eight
+        self.nine = nine
+
+    def choose(self):
+
+        # chance to make a random move:
+        random_chance = random.randint(0, 9)
+        if random_chance == 0:
+            result = random.randint(1, 9)
+        else:
+            # winning moves:
+            if (self.two == 'O' and self.three == 'O' and self.one == ''
+                    or self.five == 'O' and self.nine == 'O' and self.one == ''
+                    or self.four == 'O' and self.seven == 'O' and self.one == ''):
+                result = 1
+            elif (self.one == 'O' and self.three == 'O' and self.two == ''
+                  or self.five == 'O' and self.eight == 'O' and self.two == ''):
+                result = 2
+            elif (self.one == 'O' and self.two == 'O' and self.three == ''
+                  or self.seven == 'O' and self.five == 'O' and self.three == ''
+                  or self.six == 'O' and self.nine == 'O' and self.three == ''):
+                result = 3
+            elif (self.five == 'O' and self.six == 'O' and self.four == ''
+                  or self.one == 'O' and self.seven == 'O' and self.four == ''):
+                result = 4
+            elif (self.four == 'O' and self.six == 'O' and self.five == ''
+                  or self.two == 'O' and self.eight == 'O' and self.five == ''
+                  or self.one == 'O' and self.nine == 'O' and self.five == ''
+                  or self.three == 'O' and self.seven == 'O' and self.five == ''):
+                result = 5
+            elif (self.four == 'O' and self.five == 'O' and self.six == ''
+                  or self.three == 'O' and self.nine == 'O' and self.six == ''):
+                result = 6
+            elif (self.eight == 'O' and self.nine == 'O' and self.seven == ''
+                  or self.one == 'O' and self.four == 'O' and self.seven == ''
+                  or self.three == 'O' and self.five == 'O' and self.seven == ''):
+                result = 7
+            elif (self.seven == 'O' and self.nine == 'O' and self.eight == ''
+                  or self.two == 'O' and self.five == 'O' and self.eight == ''):
+                result = 8
+            elif (self.seven == 'O' and self.eight == 'O' and self.nine == ''
+                  or self.three == 'O' and self.six == 'O' and self.nine == ''
+                  or self.one == 'O' and self.five == 'O' and self.nine == ''):
+                result = 9
+
+            # block the player:
+            elif (self.two == 'X' and self.three == 'X' and self.one == ''
+                  or self.five == 'X' and self.nine == 'X' and self.one == ''
+                  or self.four == 'X' and self.seven == 'X' and self.one == ''):
+                result = 1
+            elif (self.one == 'X' and self.three == 'X' and self.two == ''
+                  or self.five == 'X' and self.eight == 'X' and self.two == ''):
+                result = 2
+            elif (self.one == 'X' and self.two == 'X' and self.three == ''
+                  or self.seven == 'X' and self.five == 'X' and self.three == ''
+                  or self.six == 'X' and self.nine == 'X' and self.three == ''):
+                result = 3
+            elif (self.five == 'X' and self.six == 'X' and self.four == ''
+                  or self.one == 'X' and self.seven == 'X' and self.four == ''):
+                result = 4
+            elif (self.four == 'X' and self.six == 'X' and self.five == ''
+                  or self.two == 'X' and self.eight == 'X' and self.five == ''
+                  or self.one == 'X' and self.nine == 'X' and self.five == ''
+                  or self.three == 'X' and self.seven == 'X' and self.five == ''):
+                result = 5
+            elif (self.four == 'X' and self.five == 'X' and self.six == ''
+                  or self.three == 'X' and self.nine == 'X' and self.six == ''):
+                result = 6
+            elif (self.eight == 'X' and self.nine == 'X' and self.seven == ''
+                  or self.one == 'X' and self.four == 'X' and self.seven == ''
+                  or self.three == 'X' and self.five == 'X' and self.seven == ''):
+                result = 7
+            elif (self.seven == 'X' and self.nine == 'X' and self.eight == ''
+                  or self.two == 'X' and self.five == 'X' and self.eight == ''):
+                result = 8
+            elif (self.seven == 'X' and self.eight == 'X' and self.nine == ''
+                  or self.three == 'X' and self.six == 'X' and self.nine == ''
+                  or self.one == 'X' and self.five == 'X' and self.nine == ''):
+                result = 9
+
+            else:
+                result = random.randint(1, 9)
+
+        return result
