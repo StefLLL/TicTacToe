@@ -31,7 +31,7 @@ player_icon = PhotoImage(file="icons/x.png")
 computer_icon = PhotoImage(file="icons/o.png")
 
 turn = 1
-player = 1
+player = 'green'
 
 
 def action(button):
@@ -123,11 +123,11 @@ def action(button):
                         elif all(but['text'] != '' for but in buttons):
                             game_state.config(text='Draw!')
 
-        player += 2
+        player = 'green'
 
     # PvP game:
     else:
-        if player % 2 != 0:
+        if player == 'green':
             if button['text'] == '' and game_state['text'] == 'Play!':
                 button.config(text='X', image=player_icon, bg=GREEN, width=46, height=50)
 
@@ -147,7 +147,7 @@ def action(button):
                 # check if it's a draw:
                 elif all(but['text'] != '' for but in buttons):
                     game_state.config(text='Draw!')
-            player += 1
+            player = 'red'
 
         else:
             if button['text'] == '' and game_state['text'] == 'Play!':
@@ -169,7 +169,7 @@ def action(button):
                 # check if it's a draw:
                 elif all(but['text'] != '' for but in buttons):
                     game_state.config(text='Draw!')
-                player += 1
+            player = 'green'
 
 
 def restart():
@@ -185,9 +185,9 @@ def restart():
         if checked_state.get() == 0:
             choice = buttons[random.randint(0, 8)]
             choice.config(text='O', image=computer_icon, bg=RED, width=46, height=50)
-        player = 2
+        player = 'green'
     else:
-        player = 1
+        player = 'red'
 
 
 button1 = Button(text="", command=lambda: (action(button1)), width=6, height=3, bg=BLUE)
