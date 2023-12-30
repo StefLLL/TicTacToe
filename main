@@ -31,103 +31,163 @@ player_icon = PhotoImage(file="icons/x.png")
 computer_icon = PhotoImage(file="icons/o.png")
 
 turn = 1
+player = 1
 
 
 def action(button):
-    if button['text'] == '' and game_state['text'] == 'Play!':
-        button.config(text='X', image=player_icon, bg=GREEN, width=46, height=50)
+    global player
 
-        # check if the player won:
-        if (button1['text'] == 'X' and button2['text'] == 'X' and button3['text'] == 'X'
-                or button4['text'] == 'X' and button5['text'] == 'X' and button6['text'] == 'X'
-                or button7['text'] == 'X' and button8['text'] == 'X' and button9['text'] == 'X'
-                or button1['text'] == 'X' and button4['text'] == 'X' and button7['text'] == 'X'
-                or button2['text'] == 'X' and button5['text'] == 'X' and button8['text'] == 'X'
-                or button3['text'] == 'X' and button6['text'] == 'X' and button9['text'] == 'X'
-                or button1['text'] == 'X' and button5['text'] == 'X' and button9['text'] == 'X'
-                or button3['text'] == 'X' and button5['text'] == 'X' and button7['text'] == 'X'):
-            game_state.config(text='You win!')
-            new_player_score = int(player_score['text']) + 1
-            player_score.config(text=new_player_score)
+    # PvE game:
+    if checked_state.get() == 0:
 
-        # check if it's a draw:
-        elif all(but['text'] != '' for but in buttons):
-            game_state.config(text='Draw!')
+        if button['text'] == '' and game_state['text'] == 'Play!':
+            button.config(text='X', image=player_icon, bg=GREEN, width=46, height=50)
 
-        # computer's turn:
+            # check if the player won:
+            if (button1['text'] == 'X' and button2['text'] == 'X' and button3['text'] == 'X'
+                    or button4['text'] == 'X' and button5['text'] == 'X' and button6['text'] == 'X'
+                    or button7['text'] == 'X' and button8['text'] == 'X' and button9['text'] == 'X'
+                    or button1['text'] == 'X' and button4['text'] == 'X' and button7['text'] == 'X'
+                    or button2['text'] == 'X' and button5['text'] == 'X' and button8['text'] == 'X'
+                    or button3['text'] == 'X' and button6['text'] == 'X' and button9['text'] == 'X'
+                    or button1['text'] == 'X' and button5['text'] == 'X' and button9['text'] == 'X'
+                    or button3['text'] == 'X' and button5['text'] == 'X' and button7['text'] == 'X'):
+                game_state.config(text='You win!')
+                new_player_score = int(player_score['text']) + 1
+                player_score.config(text=new_player_score)
+
+            # check if it's a draw:
+            elif all(but['text'] != '' for but in buttons):
+                game_state.config(text='Draw!')
+
+            # computer's turn:
+            else:
+                choosing = True
+                while choosing:
+
+                    # select the best choice through the crystal_ball:
+                    cb = ComputerBrain(
+                        one=button1['text'],
+                        two=button2['text'],
+                        three=button3['text'],
+                        four=button4['text'],
+                        five=button5['text'],
+                        six=button6['text'],
+                        seven=button7['text'],
+                        eight=button8['text'],
+                        nine=button9['text'])
+
+                    choice = buttons[cb.choose() - 1]
+
+                    # check if the spot is empty:
+                    if choice['text'] != 'X' and choice['text'] != 'O':
+                        choice.config(text='O', image=computer_icon, bg=RED, width=46, height=50)
+                        choosing = False
+
+                        # check if the computer won and if it's a draw:
+                        if (button1['text'] == 'O' and button2['text'] == 'O' and button3['text'] == 'O'
+                                or button4['text'] == 'O' and button5['text'] == 'O' and button6['text'] == 'O'
+                                or button7['text'] == 'O' and button8['text'] == 'O' and button9['text'] == 'O'
+                                or button1['text'] == 'O' and button4['text'] == 'O' and button7['text'] == 'O'
+                                or button2['text'] == 'O' and button5['text'] == 'O' and button8['text'] == 'O'
+                                or button3['text'] == 'O' and button6['text'] == 'O' and button9['text'] == 'O'
+                                or button1['text'] == 'O' and button5['text'] == 'O' and button9['text'] == 'O'
+                                or button3['text'] == 'O' and button5['text'] == 'O' and button7['text'] == 'O'):
+                            game_state.config(text='You lose!')
+                            new_computer_score = int(computer_score['text']) + 1
+                            computer_score.config(text=new_computer_score)
+
+                        elif all(but['text'] != '' for but in buttons):
+                            game_state.config(text='Draw!')
+
+                    # manage an invalid choice with a random one, there is no "second-best choice" here :)
+                    else:
+                        while choice['text'] == 'X' or choice['text'] == 'O':
+                            choice = buttons[random.randint(0, 8)]
+                        choice.config(text='O', image=computer_icon, bg=RED, width=46, height=50)
+                        choosing = False
+
+                        # again, check if the computer won and if it's a draw:
+                        if (button1['text'] == 'O' and button2['text'] == 'O' and button3['text'] == 'O'
+                                or button4['text'] == 'O' and button5['text'] == 'O' and button6['text'] == 'O'
+                                or button7['text'] == 'O' and button8['text'] == 'O' and button9['text'] == 'O'
+                                or button1['text'] == 'O' and button4['text'] == 'O' and button7['text'] == 'O'
+                                or button2['text'] == 'O' and button5['text'] == 'O' and button8['text'] == 'O'
+                                or button3['text'] == 'O' and button6['text'] == 'O' and button9['text'] == 'O'
+                                or button1['text'] == 'O' and button5['text'] == 'O' and button9['text'] == 'O'
+                                or button3['text'] == 'O' and button5['text'] == 'O' and button7['text'] == 'O'):
+                            game_state.config(text='You lose!')
+                            new_computer_score = int(computer_score['text']) + 1
+                            computer_score.config(text=new_computer_score)
+
+                        elif all(but['text'] != '' for but in buttons):
+                            game_state.config(text='Draw!')
+
+        player += 2
+
+    # PvP game:
+    else:
+        if player % 2 != 0:
+            if button['text'] == '' and game_state['text'] == 'Play!':
+                button.config(text='X', image=player_icon, bg=GREEN, width=46, height=50)
+
+                # check if player 1 won:
+                if (button1['text'] == 'X' and button2['text'] == 'X' and button3['text'] == 'X'
+                        or button4['text'] == 'X' and button5['text'] == 'X' and button6['text'] == 'X'
+                        or button7['text'] == 'X' and button8['text'] == 'X' and button9['text'] == 'X'
+                        or button1['text'] == 'X' and button4['text'] == 'X' and button7['text'] == 'X'
+                        or button2['text'] == 'X' and button5['text'] == 'X' and button8['text'] == 'X'
+                        or button3['text'] == 'X' and button6['text'] == 'X' and button9['text'] == 'X'
+                        or button1['text'] == 'X' and button5['text'] == 'X' and button9['text'] == 'X'
+                        or button3['text'] == 'X' and button5['text'] == 'X' and button7['text'] == 'X'):
+                    game_state.config(text='P1 won!')
+                    new_player_score = int(player_score['text']) + 1
+                    player_score.config(text=new_player_score)
+
+                # check if it's a draw:
+                elif all(but['text'] != '' for but in buttons):
+                    game_state.config(text='Draw!')
+            player += 1
+
         else:
-            choosing = True
-            while choosing:
+            if button['text'] == '' and game_state['text'] == 'Play!':
+                button.config(text='O', image=computer_icon, bg=RED, width=46, height=50)
 
-                # select the best choice through the crystal_ball:
-                cb = ComputerBrain(
-                    one=button1['text'],
-                    two=button2['text'],
-                    three=button3['text'],
-                    four=button4['text'],
-                    five=button5['text'],
-                    six=button6['text'],
-                    seven=button7['text'],
-                    eight=button8['text'],
-                    nine=button9['text'])
+                # check if player 2 won:
+                if (button1['text'] == 'O' and button2['text'] == 'O' and button3['text'] == 'O'
+                        or button4['text'] == 'O' and button5['text'] == 'O' and button6['text'] == 'O'
+                        or button7['text'] == 'O' and button8['text'] == 'O' and button9['text'] == 'O'
+                        or button1['text'] == 'O' and button4['text'] == 'O' and button7['text'] == 'O'
+                        or button2['text'] == 'O' and button5['text'] == 'O' and button8['text'] == 'O'
+                        or button3['text'] == 'O' and button6['text'] == 'O' and button9['text'] == 'O'
+                        or button1['text'] == 'O' and button5['text'] == 'O' and button9['text'] == 'O'
+                        or button3['text'] == 'O' and button5['text'] == 'O' and button7['text'] == 'O'):
+                    game_state.config(text='P2 won!')
+                    new_computer_score = int(computer_score['text']) + 1
+                    computer_score.config(text=new_computer_score)
 
-                choice = buttons[cb.choose() - 1]
-
-                # check if the spot is empty:
-                if choice['text'] != 'X' and choice['text'] != 'O':
-                    choice.config(text='O', image=computer_icon, bg=RED, width=46, height=50)
-                    choosing = False
-
-                    # check if the computer won and if it's a draw:
-                    if (button1['text'] == 'O' and button2['text'] == 'O' and button3['text'] == 'O'
-                            or button4['text'] == 'O' and button5['text'] == 'O' and button6['text'] == 'O'
-                            or button7['text'] == 'O' and button8['text'] == 'O' and button9['text'] == 'O'
-                            or button1['text'] == 'O' and button4['text'] == 'O' and button7['text'] == 'O'
-                            or button2['text'] == 'O' and button5['text'] == 'O' and button8['text'] == 'O'
-                            or button3['text'] == 'O' and button6['text'] == 'O' and button9['text'] == 'O'
-                            or button1['text'] == 'O' and button5['text'] == 'O' and button9['text'] == 'O'
-                            or button3['text'] == 'O' and button5['text'] == 'O' and button7['text'] == 'O'):
-                        game_state.config(text='You lose!')
-                        new_computer_score = int(computer_score['text']) + 1
-                        computer_score.config(text=new_computer_score)
-
-                    elif all(but['text'] != '' for but in buttons):
-                        game_state.config(text='Draw!')
-
-                # manage an invalid choice with a random one, there is no "second-best choice" here :)
-                else:
-                    while choice['text'] == 'X' or choice['text'] == 'O':
-                        choice = buttons[random.randint(0, 8)]
-                    choice.config(text='O', image=computer_icon, bg=RED, width=46, height=50)
-                    choosing = False
-
-                    # again, check if the computer won and if it's a draw:
-                    if (button1['text'] == 'O' and button2['text'] == 'O' and button3['text'] == 'O'
-                            or button4['text'] == 'O' and button5['text'] == 'O' and button6['text'] == 'O'
-                            or button7['text'] == 'O' and button8['text'] == 'O' and button9['text'] == 'O'
-                            or button1['text'] == 'O' and button4['text'] == 'O' and button7['text'] == 'O'
-                            or button2['text'] == 'O' and button5['text'] == 'O' and button8['text'] == 'O'
-                            or button3['text'] == 'O' and button6['text'] == 'O' and button9['text'] == 'O'
-                            or button1['text'] == 'O' and button5['text'] == 'O' and button9['text'] == 'O'
-                            or button3['text'] == 'O' and button5['text'] == 'O' and button7['text'] == 'O'):
-                        game_state.config(text='You lose!')
-                        new_computer_score = int(computer_score['text']) + 1
-                        computer_score.config(text=new_computer_score)
-
-                    elif all(but['text'] != '' for but in buttons):
-                        game_state.config(text='Draw!')
+                # check if it's a draw:
+                elif all(but['text'] != '' for but in buttons):
+                    game_state.config(text='Draw!')
+                player += 1
 
 
 def restart():
     global turn
+    global player
+
     for but in buttons:
         but.config(text='', bg=BLUE, image='', width=6, height=3)
     game_state.config(text='Play!')
 
     turn += 1
     if turn % 2 == 0:
-        choice = buttons[random.randint(0, 8)]
-        choice.config(text='O', image=computer_icon, bg=RED, width=46, height=50)
+        if checked_state.get() == 0:
+            choice = buttons[random.randint(0, 8)]
+            choice.config(text='O', image=computer_icon, bg=RED, width=46, height=50)
+        player = 2
+    else:
+        player = 1
 
 
 button1 = Button(text="", command=lambda: (action(button1)), width=6, height=3, bg=BLUE)
@@ -162,5 +222,12 @@ buttons = [button1, button2, button3, button4, button5, button6, button7, button
 redo = PhotoImage(file="icons/restart.png")
 button10 = Button(image=redo, command=restart, bg=YELLOW, width=46, height=50)
 button10.grid(column=2, row=4)
+
+
+checked_state = IntVar()
+checkbutton = Checkbutton(text="PvP", onvalue='1', offvalue='0', variable=checked_state)
+state = checked_state.get()
+print(state)
+checkbutton.grid(column=1, row=5)
 
 window.mainloop()
