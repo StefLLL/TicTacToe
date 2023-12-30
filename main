@@ -30,12 +30,12 @@ computer_score.grid(column=2, row=5)
 player_icon = PhotoImage(file="icons/x.png")
 computer_icon = PhotoImage(file="icons/o.png")
 
-turn = 1
-player = 'green'
+starting_player = 'green'
+current_player = 'green'
 
 
 def action(button):
-    global player
+    global current_player
 
     # PvE game:
     if checked_state.get() == 0:
@@ -123,11 +123,11 @@ def action(button):
                         elif all(but['text'] != '' for but in buttons):
                             game_state.config(text='Draw!')
 
-        player = 'green'
+        current_player = 'green'
 
     # PvP game:
     else:
-        if player == 'green':
+        if current_player == 'green':
             if button['text'] == '' and game_state['text'] == 'Play!':
                 button.config(text='X', image=player_icon, bg=GREEN, width=46, height=50)
 
@@ -147,7 +147,7 @@ def action(button):
                 # check if it's a draw:
                 elif all(but['text'] != '' for but in buttons):
                     game_state.config(text='Draw!')
-            player = 'red'
+            current_player = 'red'
 
         else:
             if button['text'] == '' and game_state['text'] == 'Play!':
@@ -169,25 +169,26 @@ def action(button):
                 # check if it's a draw:
                 elif all(but['text'] != '' for but in buttons):
                     game_state.config(text='Draw!')
-            player = 'green'
+            current_player = 'green'
 
 
 def restart():
-    global turn
-    global player
+    global starting_player
+    global current_player
 
     for but in buttons:
         but.config(text='', bg=BLUE, image='', width=6, height=3)
     game_state.config(text='Play!')
 
-    turn += 1
-    if turn % 2 == 0:
+    if starting_player == 'green':
         if checked_state.get() == 0:
             choice = buttons[random.randint(0, 8)]
             choice.config(text='O', image=computer_icon, bg=RED, width=46, height=50)
-        player = 'green'
+        current_player = 'green'
+        starting_player = 'red'
     else:
-        player = 'red'
+        current_player = 'red'
+        starting_player = 'green'
 
 
 button1 = Button(text="", command=lambda: (action(button1)), width=6, height=3, bg=BLUE)
@@ -225,7 +226,7 @@ button10.grid(column=2, row=4)
 
 
 checked_state = IntVar()
-checkbutton = Checkbutton(text="PvP", onvalue='1', offvalue='0', variable=checked_state)
+checkbutton = Checkbutton(text="PvP", onvalue='1', offvalue='0', variable=checked_state, command=restart)
 state = checked_state.get()
 print(state)
 checkbutton.grid(column=1, row=5)
