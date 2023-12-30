@@ -1,0 +1,166 @@
+from tkinter import *
+from crystal_ball import ComputerBrain
+import random
+
+RED = '#E8C29F'
+GREEN = '#9bdeac'
+BLUE = '#9FE5E8'
+YELLOW = '#E4E9B4'
+player_score_color = '#2ABF55'
+computer_score_color = '#BF432A'
+
+window = Tk()
+window.title('TTT!')
+window.minsize(200, 400)
+window.config(padx=20, pady=20)
+
+game_icon = PhotoImage(file="icons/game_icon.png")
+game_title = Label(image=game_icon)
+game_title.grid(column=0, row=0, columnspan=3, pady=10)
+
+game_state = Label(text='Play!', font=('Arial', 16, 'bold'))
+game_state.grid(column=0, row=4, columnspan=2)
+
+player_score = Label(text='0', font=('Arial', 22, 'bold'), fg=player_score_color)
+player_score.grid(column=0, row=5, pady=20)
+
+computer_score = Label(text='0', font=('Arial', 22, 'bold'), fg=computer_score_color)
+computer_score.grid(column=2, row=5)
+
+player_icon = PhotoImage(file="icons/x.png")
+computer_icon = PhotoImage(file="icons/o.png")
+
+turn = 1
+
+
+def action(button):
+    if button['text'] == '' and game_state['text'] == 'Play!':
+        button.config(text='X', image=player_icon, bg=GREEN, width=46, height=50)
+
+        # check if the player won:
+        if (button1['text'] == 'X' and button2['text'] == 'X' and button3['text'] == 'X'
+                or button4['text'] == 'X' and button5['text'] == 'X' and button6['text'] == 'X'
+                or button7['text'] == 'X' and button8['text'] == 'X' and button9['text'] == 'X'
+                or button1['text'] == 'X' and button4['text'] == 'X' and button7['text'] == 'X'
+                or button2['text'] == 'X' and button5['text'] == 'X' and button8['text'] == 'X'
+                or button3['text'] == 'X' and button6['text'] == 'X' and button9['text'] == 'X'
+                or button1['text'] == 'X' and button5['text'] == 'X' and button9['text'] == 'X'
+                or button3['text'] == 'X' and button5['text'] == 'X' and button7['text'] == 'X'):
+            game_state.config(text='You win!')
+            new_player_score = int(player_score['text']) + 1
+            player_score.config(text=new_player_score)
+
+        # check if it's a draw:
+        elif all(but['text'] != '' for but in buttons):
+            game_state.config(text='Draw!')
+
+        # computer's turn:
+        else:
+            choosing = True
+            while choosing:
+
+                # select the best choice through the crystal_ball:
+                cb = ComputerBrain(
+                    one=button1['text'],
+                    two=button2['text'],
+                    three=button3['text'],
+                    four=button4['text'],
+                    five=button5['text'],
+                    six=button6['text'],
+                    seven=button7['text'],
+                    eight=button8['text'],
+                    nine=button9['text'])
+
+                choice = buttons[cb.choose() - 1]
+
+                # check if the spot is empty:
+                if choice['text'] != 'X' and choice['text'] != 'O':
+                    choice.config(text='O', image=computer_icon, bg=RED, width=46, height=50)
+                    choosing = False
+
+                    # check if the computer won and if it's a draw:
+                    if (button1['text'] == 'O' and button2['text'] == 'O' and button3['text'] == 'O'
+                            or button4['text'] == 'O' and button5['text'] == 'O' and button6['text'] == 'O'
+                            or button7['text'] == 'O' and button8['text'] == 'O' and button9['text'] == 'O'
+                            or button1['text'] == 'O' and button4['text'] == 'O' and button7['text'] == 'O'
+                            or button2['text'] == 'O' and button5['text'] == 'O' and button8['text'] == 'O'
+                            or button3['text'] == 'O' and button6['text'] == 'O' and button9['text'] == 'O'
+                            or button1['text'] == 'O' and button5['text'] == 'O' and button9['text'] == 'O'
+                            or button3['text'] == 'O' and button5['text'] == 'O' and button7['text'] == 'O'):
+                        game_state.config(text='You lose!')
+                        new_computer_score = int(computer_score['text']) + 1
+                        computer_score.config(text=new_computer_score)
+
+                    elif all(but['text'] != '' for but in buttons):
+                        game_state.config(text='Draw!')
+
+                # manage an invalid choice with a random one, there is no "second-best choice" here :)
+                else:
+                    while choice['text'] == 'X' or choice['text'] == 'O':
+                        choice = buttons[random.randint(0, 8)]
+                    choice.config(text='O', image=computer_icon, bg=RED, width=46, height=50)
+                    choosing = False
+
+                    # again, check if the computer won and if it's a draw:
+                    if (button1['text'] == 'O' and button2['text'] == 'O' and button3['text'] == 'O'
+                            or button4['text'] == 'O' and button5['text'] == 'O' and button6['text'] == 'O'
+                            or button7['text'] == 'O' and button8['text'] == 'O' and button9['text'] == 'O'
+                            or button1['text'] == 'O' and button4['text'] == 'O' and button7['text'] == 'O'
+                            or button2['text'] == 'O' and button5['text'] == 'O' and button8['text'] == 'O'
+                            or button3['text'] == 'O' and button6['text'] == 'O' and button9['text'] == 'O'
+                            or button1['text'] == 'O' and button5['text'] == 'O' and button9['text'] == 'O'
+                            or button3['text'] == 'O' and button5['text'] == 'O' and button7['text'] == 'O'):
+                        game_state.config(text='You lose!')
+                        new_computer_score = int(computer_score['text']) + 1
+                        computer_score.config(text=new_computer_score)
+
+                    elif all(but['text'] != '' for but in buttons):
+                        game_state.config(text='Draw!')
+
+
+def restart():
+    global turn
+    for but in buttons:
+        but.config(text='', bg=BLUE, image='', width=6, height=3)
+    game_state.config(text='Play!')
+
+    turn += 1
+    if turn % 2 == 0:
+        choice = buttons[random.randint(0, 8)]
+        choice.config(text='O', image=computer_icon, bg=RED, width=46, height=50)
+
+
+button1 = Button(text="", command=lambda: (action(button1)), width=6, height=3, bg=BLUE)
+button1.grid(column=0, row=1)
+
+button2 = Button(text="", command=lambda: (action(button2)), width=6, height=3, bg=BLUE)
+button2.grid(column=1, row=1)
+
+button3 = Button(text="", command=lambda: (action(button3)), width=6, height=3, bg=BLUE)
+button3.grid(column=2, row=1)
+
+button4 = Button(text="", command=lambda: (action(button4)), width=6, height=3, bg=BLUE)
+button4.grid(column=0, row=2)
+
+button5 = Button(text="", command=lambda: (action(button5)), width=6, height=3, bg=BLUE)
+button5.grid(column=1, row=2)
+
+button6 = Button(text="", command=lambda: (action(button6)), width=6, height=3, bg=BLUE)
+button6.grid(column=2, row=2)
+
+button7 = Button(text="", command=lambda: (action(button7)), width=6, height=3, bg=BLUE)
+button7.grid(column=0, row=3)
+
+button8 = Button(text="", command=lambda: (action(button8)), width=6, height=3, bg=BLUE)
+button8.grid(column=1, row=3)
+
+button9 = Button(text="", command=lambda: (action(button9)), width=6, height=3, bg=BLUE)
+button9.grid(column=2, row=3)
+
+buttons = [button1, button2, button3, button4, button5, button6, button7, button8, button9]
+
+redo = PhotoImage(file="icons/restart.png")
+button10 = Button(image=redo, command=restart, bg=YELLOW, width=46, height=50)
+button10.grid(column=2, row=4)
+
+window.mainloop()
