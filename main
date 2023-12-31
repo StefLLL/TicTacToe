@@ -212,11 +212,8 @@ redo = PhotoImage(file="icons/restart.png")
 button10 = Button(image=redo, command=restart, bg=YELLOW, width=46, height=50)
 button10.grid(column=2, row=4)
 
-
 checked_state = IntVar()
 checkbutton = Checkbutton(text="PvP", onvalue='1', offvalue='0', variable=checked_state, command=restart)
-state = checked_state.get()
-print(state)
 checkbutton.grid(column=1, row=5)
 
 window.mainloop()
