@@ -68,13 +68,13 @@ def action(button):
 
             # check if the player won:
             if check_who_won() == 'p1':
-                game_state.config(text='You win!')
+                game_state.config(text='You win!', fg=player_score_color)
                 new_player_score = int(player_score['text']) + 1
                 player_score.config(text=new_player_score)
 
             # check if it's a draw:
             elif all(but['text'] != '' for but in buttons):
-                game_state.config(text='Draw!')
+                game_state.config(text='Draw!', fg='black')
 
             # computer's turn:
             else:
@@ -102,12 +102,12 @@ def action(button):
 
                         # check if the computer won and if it's a draw:
                         if check_who_won() == 'p2':
-                            game_state.config(text='You lose!')
+                            game_state.config(text='You lose!', fg=computer_score_color)
                             new_computer_score = int(computer_score['text']) + 1
                             computer_score.config(text=new_computer_score)
 
                         elif all(but['text'] != '' for but in buttons):
-                            game_state.config(text='Draw!')
+                            game_state.config(text='Draw!', fg='black')
 
                     # manage an invalid choice with a random one, there is no "second-best choice" here :)
                     else:
@@ -123,40 +123,46 @@ def action(button):
                             computer_score.config(text=new_computer_score)
 
                         elif all(but['text'] != '' for but in buttons):
-                            game_state.config(text='Draw!')
+                            game_state.config(text='Draw!', fg='black')
 
         current_player = 'green'
 
     # PvP game:
     else:
         if current_player == 'green':
-            if button['text'] == '' and game_state['text'] == 'Play!':
+            if (button['text'] == '' and game_state['text'] == 'P1 turn!'
+            or button['text'] == '' and game_state['text'] == 'P2 turn!'):
                 button.config(text='X', image=player_icon, bg=GREEN, width=46, height=50)
 
                 # check if player 1 won:
                 if check_who_won() == 'p1':
-                    game_state.config(text='P1 won!')
+                    game_state.config(text='P1 won!', fg=player_score_color)
                     new_player_score = int(player_score['text']) + 1
                     player_score.config(text=new_player_score)
 
                 # check if it's a draw:
                 elif all(but['text'] != '' for but in buttons):
-                    game_state.config(text='Draw!')
+                    game_state.config(text='Draw!', fg='black')
+                else:
+                    game_state.config(text='P2 turn!', fg=computer_score_color)
             current_player = 'red'
 
         else:
-            if button['text'] == '' and game_state['text'] == 'Play!':
+            if (button['text'] == '' and game_state['text'] == 'P1 turn!'
+            or button['text'] == '' and game_state['text'] == 'P2 turn!'):
                 button.config(text='O', image=computer_icon, bg=RED, width=46, height=50)
 
                 # check if player 2 won:
                 if check_who_won() == 'p2':
-                    game_state.config(text='P2 won!')
+                    game_state.config(text='P2 won!', fg=computer_score_color)
                     new_computer_score = int(computer_score['text']) + 1
                     computer_score.config(text=new_computer_score)
 
                 # check if it's a draw:
                 elif all(but['text'] != '' for but in buttons):
-                    game_state.config(text='Draw!')
+                    game_state.config(text='Draw!', fg='black')
+                else:
+                    game_state.config(text='P1 turn!', fg=player_score_color)
             current_player = 'green'
 
 
@@ -166,15 +172,19 @@ def restart():
 
     for but in buttons:
         but.config(text='', bg=BLUE, image='', width=6, height=3)
-    game_state.config(text='Play!')
+    game_state.config(text='Play!', fg='black')
 
     if starting_player == 'green':
         if checked_state.get() == 0:
             choice = buttons[random.randint(0, 8)]
             choice.config(text='O', image=computer_icon, bg=RED, width=46, height=50)
+        else:
+            game_state.config(text='P1 turn!', fg=player_score_color)
         current_player = 'green'
         starting_player = 'red'
     else:
+        if checked_state.get() == 1:
+            game_state.config(text='P2 turn!', fg=computer_score_color)
         current_player = 'red'
         starting_player = 'green'
 
