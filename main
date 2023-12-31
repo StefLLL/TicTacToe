@@ -34,6 +34,29 @@ starting_player = 'green'
 current_player = 'green'
 
 
+def check_who_won():
+    if (button1['text'] == 'X' and button2['text'] == 'X' and button3['text'] == 'X'
+            or button4['text'] == 'X' and button5['text'] == 'X' and button6['text'] == 'X'
+            or button7['text'] == 'X' and button8['text'] == 'X' and button9['text'] == 'X'
+            or button1['text'] == 'X' and button4['text'] == 'X' and button7['text'] == 'X'
+            or button2['text'] == 'X' and button5['text'] == 'X' and button8['text'] == 'X'
+            or button3['text'] == 'X' and button6['text'] == 'X' and button9['text'] == 'X'
+            or button1['text'] == 'X' and button5['text'] == 'X' and button9['text'] == 'X'
+            or button3['text'] == 'X' and button5['text'] == 'X' and button7['text'] == 'X'):
+        return 'p1'
+    elif (button1['text'] == 'O' and button2['text'] == 'O' and button3['text'] == 'O'
+            or button4['text'] == 'O' and button5['text'] == 'O' and button6['text'] == 'O'
+            or button7['text'] == 'O' and button8['text'] == 'O' and button9['text'] == 'O'
+            or button1['text'] == 'O' and button4['text'] == 'O' and button7['text'] == 'O'
+            or button2['text'] == 'O' and button5['text'] == 'O' and button8['text'] == 'O'
+            or button3['text'] == 'O' and button6['text'] == 'O' and button9['text'] == 'O'
+            or button1['text'] == 'O' and button5['text'] == 'O' and button9['text'] == 'O'
+            or button3['text'] == 'O' and button5['text'] == 'O' and button7['text'] == 'O'):
+        return 'p2'
+    else:
+        return 'none'
+
+
 def action(button):
     global current_player
 
@@ -44,14 +67,7 @@ def action(button):
             button.config(text='X', image=player_icon, bg=GREEN, width=46, height=50)
 
             # check if the player won:
-            if (button1['text'] == 'X' and button2['text'] == 'X' and button3['text'] == 'X'
-                    or button4['text'] == 'X' and button5['text'] == 'X' and button6['text'] == 'X'
-                    or button7['text'] == 'X' and button8['text'] == 'X' and button9['text'] == 'X'
-                    or button1['text'] == 'X' and button4['text'] == 'X' and button7['text'] == 'X'
-                    or button2['text'] == 'X' and button5['text'] == 'X' and button8['text'] == 'X'
-                    or button3['text'] == 'X' and button6['text'] == 'X' and button9['text'] == 'X'
-                    or button1['text'] == 'X' and button5['text'] == 'X' and button9['text'] == 'X'
-                    or button3['text'] == 'X' and button5['text'] == 'X' and button7['text'] == 'X'):
+            if check_who_won() == 'p1':
                 game_state.config(text='You win!')
                 new_player_score = int(player_score['text']) + 1
                 player_score.config(text=new_player_score)
@@ -85,14 +101,7 @@ def action(button):
                         choosing = False
 
                         # check if the computer won and if it's a draw:
-                        if (button1['text'] == 'O' and button2['text'] == 'O' and button3['text'] == 'O'
-                                or button4['text'] == 'O' and button5['text'] == 'O' and button6['text'] == 'O'
-                                or button7['text'] == 'O' and button8['text'] == 'O' and button9['text'] == 'O'
-                                or button1['text'] == 'O' and button4['text'] == 'O' and button7['text'] == 'O'
-                                or button2['text'] == 'O' and button5['text'] == 'O' and button8['text'] == 'O'
-                                or button3['text'] == 'O' and button6['text'] == 'O' and button9['text'] == 'O'
-                                or button1['text'] == 'O' and button5['text'] == 'O' and button9['text'] == 'O'
-                                or button3['text'] == 'O' and button5['text'] == 'O' and button7['text'] == 'O'):
+                        if check_who_won() == 'p2':
                             game_state.config(text='You lose!')
                             new_computer_score = int(computer_score['text']) + 1
                             computer_score.config(text=new_computer_score)
@@ -108,14 +117,7 @@ def action(button):
                         choosing = False
 
                         # again, check if the computer won and if it's a draw:
-                        if (button1['text'] == 'O' and button2['text'] == 'O' and button3['text'] == 'O'
-                                or button4['text'] == 'O' and button5['text'] == 'O' and button6['text'] == 'O'
-                                or button7['text'] == 'O' and button8['text'] == 'O' and button9['text'] == 'O'
-                                or button1['text'] == 'O' and button4['text'] == 'O' and button7['text'] == 'O'
-                                or button2['text'] == 'O' and button5['text'] == 'O' and button8['text'] == 'O'
-                                or button3['text'] == 'O' and button6['text'] == 'O' and button9['text'] == 'O'
-                                or button1['text'] == 'O' and button5['text'] == 'O' and button9['text'] == 'O'
-                                or button3['text'] == 'O' and button5['text'] == 'O' and button7['text'] == 'O'):
+                        if check_who_won() == 'p2':
                             game_state.config(text='You lose!')
                             new_computer_score = int(computer_score['text']) + 1
                             computer_score.config(text=new_computer_score)
@@ -132,14 +134,7 @@ def action(button):
                 button.config(text='X', image=player_icon, bg=GREEN, width=46, height=50)
 
                 # check if player 1 won:
-                if (button1['text'] == 'X' and button2['text'] == 'X' and button3['text'] == 'X'
-                        or button4['text'] == 'X' and button5['text'] == 'X' and button6['text'] == 'X'
-                        or button7['text'] == 'X' and button8['text'] == 'X' and button9['text'] == 'X'
-                        or button1['text'] == 'X' and button4['text'] == 'X' and button7['text'] == 'X'
-                        or button2['text'] == 'X' and button5['text'] == 'X' and button8['text'] == 'X'
-                        or button3['text'] == 'X' and button6['text'] == 'X' and button9['text'] == 'X'
-                        or button1['text'] == 'X' and button5['text'] == 'X' and button9['text'] == 'X'
-                        or button3['text'] == 'X' and button5['text'] == 'X' and button7['text'] == 'X'):
+                if check_who_won() == 'p1':
                     game_state.config(text='P1 won!')
                     new_player_score = int(player_score['text']) + 1
                     player_score.config(text=new_player_score)
@@ -154,14 +149,7 @@ def action(button):
                 button.config(text='O', image=computer_icon, bg=RED, width=46, height=50)
 
                 # check if player 2 won:
-                if (button1['text'] == 'O' and button2['text'] == 'O' and button3['text'] == 'O'
-                        or button4['text'] == 'O' and button5['text'] == 'O' and button6['text'] == 'O'
-                        or button7['text'] == 'O' and button8['text'] == 'O' and button9['text'] == 'O'
-                        or button1['text'] == 'O' and button4['text'] == 'O' and button7['text'] == 'O'
-                        or button2['text'] == 'O' and button5['text'] == 'O' and button8['text'] == 'O'
-                        or button3['text'] == 'O' and button6['text'] == 'O' and button9['text'] == 'O'
-                        or button1['text'] == 'O' and button5['text'] == 'O' and button9['text'] == 'O'
-                        or button3['text'] == 'O' and button5['text'] == 'O' and button7['text'] == 'O'):
+                if check_who_won() == 'p2':
                     game_state.config(text='P2 won!')
                     new_computer_score = int(computer_score['text']) + 1
                     computer_score.config(text=new_computer_score)
